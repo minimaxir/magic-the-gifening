@@ -3,6 +3,8 @@ import time
 from secrets import *
 
 GIPHY_API_URL = "https://api.giphy.com/v1/gifs/random?api_key={}&tag={}"
+GATHERER_URL = "http://gatherer.wizards.com/Handlers/Image.ashx" \
+                    "?multiverseid={}&type=card"
 
 
 def get_gif(name, GIPHY_API_KEY=GIPHY_API_KEY, max_attempts=10):
@@ -17,3 +19,7 @@ def get_gif(name, GIPHY_API_KEY=GIPHY_API_KEY, max_attempts=10):
             return gif['image_mp4_url']
         attempts += 1
         time.sleep(1)
+
+
+def get_mtg_image(id):
+    return GATHERER_URL.format(id)
