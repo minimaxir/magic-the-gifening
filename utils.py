@@ -24,7 +24,7 @@ def get_giphy_gif(name, GIPHY_API_KEY=GIPHY_API_KEY, max_attempts=10):
                 file.write(requests.get(gif['image_mp4_url']).content)
                 return
         attempts += 1
-        time.sleep(1)
+        # time.sleep(1)
 
 
 def get_mtg_image(id):
@@ -40,11 +40,11 @@ def create_mtg_gif(name, id):
     mtg_card = ImageClip(np.asarray(mtg_card))
 
     get_giphy_gif(name)
-    giphy_gif = (VideoFileClip('giphy_gif.mp4')
-                 .resize((gif_width, gif_height))
+    giphy_gif = (VideoFileClip('giphy_gif.mp4',
+                               target_resolution=(gif_height, gif_width))
                  .set_pos(card_upper_corner)
                  )
 
     mtg_gif = CompositeVideoClip([mtg_card, giphy_gif])
-    mtg_gif = mtg_gif.set_duration(giphy_gif.duration-(1/60))
+    mtg_gif = mtg_gif.set_duration(giphy_gif.duration - (1 / 60))
     mtg_gif.write_gif("mtg_gif.gif")
