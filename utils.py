@@ -37,14 +37,17 @@ def create_mtg_gif(name, id):
     gif_height = 173 - card_upper_corner[1]
 
     mtg_card = Image.open(BytesIO(requests.get(get_mtg_image(id)).content))
-    mtg_card = ImageClip(np.asarray(mtg_card))
+    mtg_card = ImageClip(np.asarray(mtg_card)).resize((222, 310))
 
     get_giphy_gif(name)
     giphy_gif = (VideoFileClip('giphy_gif.mp4',
                                target_resolution=(gif_height, gif_width))
                  .set_pos(card_upper_corner)
+
                  )
 
     mtg_gif = CompositeVideoClip([mtg_card, giphy_gif])
-    mtg_gif = mtg_gif.set_duration(giphy_gif.duration - (1 / 60))
-    mtg_gif.write_gif("mtg_gif.gif")
+    mtg_gif = mtg_gif.set_start(0).set_duration(giphy_gif.duration)
+    # mtg_gif.write_gif("mtg_gif.gif")
+    mtg_gif.write_videofile("mtg_gif.mp4", codec='libx264', bitrate="50000000",
+                            audio=False, ffmpeg_params=['-pix_fmt', 'yuv420p'])
