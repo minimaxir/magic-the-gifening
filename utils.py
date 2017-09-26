@@ -31,10 +31,19 @@ def get_mtg_image(id):
     return GATHERER_URL.format(id)
 
 
-def create_mtg_gif(name, id):
-    card_upper_corner = (17, 35)
-    gif_width = 205 - card_upper_corner[0]
-    gif_height = 173 - card_upper_corner[1]
+def create_mtg_gif(name, id, border):
+    if border == 'm':   # Modern (post-8th Ed)
+        card_upper_corner = (19, 38)
+        gif_width = 202 - card_upper_corner[0]
+        gif_height = 171 - card_upper_corner[1]
+    elif border == 'c':   # Current (post-Magic 2015)
+        card_upper_corner = (17, 35)
+        gif_width = 204 - card_upper_corner[0]
+        gif_height = 173 - card_upper_corner[1]
+    else:   # Old (pre-8th Ed)
+        card_upper_corner = (25, 30)
+        gif_width = 196 - card_upper_corner[0]
+        gif_height = 168 - card_upper_corner[1]
 
     mtg_card = Image.open(BytesIO(requests.get(get_mtg_image(id)).content))
     mtg_card = ImageClip(np.asarray(mtg_card)).resize((222, 310))
@@ -45,9 +54,12 @@ def create_mtg_gif(name, id):
                  .set_pos(card_upper_corner)
 
                  )
+    giphy_gif = giphy_gif.set_duration(max(giphy_gif.duration, 2))
 
     mtg_gif = CompositeVideoClip([mtg_card, giphy_gif])
     mtg_gif = mtg_gif.set_start(0).set_duration(giphy_gif.duration)
     # mtg_gif.write_gif("mtg_gif.gif")
-    mtg_gif.write_videofile("mtg_gif.mp4", codec='libx264', bitrate="50000000",
+    mtg_gif.write_videofile("mtg_gif.mp4", codec='libx264',
+                            bitrate=str(np.power(10, 10)), verbose=False,
+                            progress_bar=False,
                             audio=False, ffmpeg_params=['-pix_fmt', 'yuv420p'])
