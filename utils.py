@@ -2,6 +2,7 @@ import requests
 import time
 from secrets import *
 from moviepy.editor import VideoFileClip, ImageClip, CompositeVideoClip
+from moviepy.video.fx.all import loop
 from io import BytesIO
 from PIL import Image
 import numpy as np
@@ -17,14 +18,11 @@ def get_giphy_gif(name, GIPHY_API_KEY=GIPHY_API_KEY, max_attempts=10):
         r = requests.get(GIPHY_API_URL.format(GIPHY_API_KEY, name))
         gif = r.json()['data']
         ratio = int(gif['image_width']) / int(gif['image_height'])
-        # return gif['image_mp4_url']
-        # print(ratio)
         if 1.3 < ratio < 1.6:
             with open('giphy_gif.mp4', 'wb') as file:
                 file.write(requests.get(gif['image_mp4_url']).content)
                 return
         attempts += 1
-        # time.sleep(1)
 
 
 def get_mtg_image(id):
@@ -35,7 +33,7 @@ def create_mtg_gif(name, id, border):
     if border == 'm':   # Modern (post-8th Ed)
         card_upper_corner = (19, 38)
         gif_width = 202 - card_upper_corner[0]
-        gif_height = 171 - card_upper_corner[1]
+        gif_height = 172 - card_upper_corner[1]
     elif border == 'c':   # Current (post-Magic 2015)
         card_upper_corner = (17, 35)
         gif_width = 204 - card_upper_corner[0]
@@ -54,12 +52,14 @@ def create_mtg_gif(name, id, border):
                  .set_pos(card_upper_corner)
 
                  )
-    giphy_gif = giphy_gif.set_duration(max(giphy_gif.duration, 2))
+
+    if giphy_gif.duration < 2:
+        giphy_gif = giphy_gif.fx(loop, n=1+int(2 // giphy_gif.duration))
 
     mtg_gif = CompositeVideoClip([mtg_card, giphy_gif])
     mtg_gif = mtg_gif.set_start(0).set_duration(giphy_gif.duration)
     # mtg_gif.write_gif("mtg_gif.gif")
     mtg_gif.write_videofile("mtg_gif.mp4", codec='libx264',
-                            bitrate=str(np.power(10, 10)), verbose=False,
+                            bitrate=str(np.power(10, 7)), verbose=False,
                             progress_bar=False,
                             audio=False, ffmpeg_params=['-pix_fmt', 'yuv420p'])
