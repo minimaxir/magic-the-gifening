@@ -23,6 +23,7 @@ def get_giphy_gif(name, GIPHY_API_KEY=GIPHY_API_KEY, max_attempts=10):
                 file.write(requests.get(gif['image_mp4_url']).content)
                 return
         attempts += 1
+    raise Exception('Failed to find a GIF for {}'.format(name))
 
 
 def get_mtg_image(id):
