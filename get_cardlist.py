@@ -3,7 +3,7 @@ import csv
 
 file_path = "/Users/maxwoolf/Downloads/AllSets.json"
 invalid_sets = ['MED', 'ME2', 'ME3', 'ME4']
-MODERN_THRESH = '2003-07-29'
+MODERN_THRESH = '2003-07-28'
 CURRENT_THRESH = '2014-07-28'
 
 
