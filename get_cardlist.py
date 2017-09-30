@@ -2,6 +2,7 @@ import json
 import csv
 
 file_path = "/Users/maxwoolf/Downloads/AllSets.json"
+invalid_sets = ['MED', 'ME2', 'ME3', 'ME4']
 MODERN_THRESH = '2003-07-29'
 CURRENT_THRESH = '2014-07-28'
 
@@ -25,7 +26,7 @@ with open('cards.csv', 'w', encoding='utf-8') as f:
             border = encode_border(all_sets[set]['releaseDate'])
             cards = all_sets[set]['cards']
             for card in cards:
-                if 'multiverseid' in card:
+                if 'multiverseid' in card and set not in invalid_sets:
                     type = card.get('type')
 
                     if (type is not None and
