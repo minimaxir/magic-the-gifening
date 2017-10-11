@@ -14,9 +14,10 @@ RUN python3 -c "import imageio; imageio.plugins.ffmpeg.download()"
 COPY . /
 
 # Setup cron job
-RUN (crontab -l; echo "* * * * * ls; cd / && python3 /mtgifening.py >> /dev/pts/0 2>&1") | crontab
+#RUN (crontab -l; echo "* * * * * ls; cd / && python3 /mtgifening.py >> /dev/pts/0 2>&1") | crontab
+RUN (crontab -l; echo "0 */6 * * * (ls; cd / && python3 /mtgifening.py) >/dev/null") | crontab
 
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-ENTRYPOINT /sbin/my_init
+#ENTRYPOINT /sbin/my_init

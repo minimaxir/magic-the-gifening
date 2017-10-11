@@ -36,7 +36,7 @@ def create_mtg_gif(name, id, border):
         gif_width = 202 - card_upper_corner[0]
         gif_height = 172 - card_upper_corner[1]
     elif border == 'c':   # Current (post-Magic 2015)
-        card_upper_corner = (17, 35)
+        card_upper_corner = (17, 34)
         gif_width = 204 - card_upper_corner[0]
         gif_height = 173 - card_upper_corner[1]
     else:   # Old (pre-8th Ed)
