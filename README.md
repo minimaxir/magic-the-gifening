@@ -10,6 +10,8 @@ Some highlights:
 * [Vendetta](https://twitter.com/MTGIFening/status/916902255277760514)
 * [Sudden Shock](https://twitter.com/MTGIFening/status/913981726182981632)
 * [Metamorphosis](https://twitter.com/MTGIFening/status/914012656167559168)
+* [Constant Mists](https://twitter.com/MTGIFening/status/917080928853254144)
+* [Screaming Fury](https://twitter.com/MTGIFening/status/912525635632775168)
 
 In order to tweet on a regular schedule, the Dockerfile contains a cronjob which runs the script at the specified interval of time (currently set at 4 times a day/every 6 hours).
 
@@ -34,6 +36,9 @@ To run as a Twitter bot on the schedule, after you've added your `secrets.py` fi
 ```
 docker run --rm -d magic /sbin/my_init
 ```
+
+## Notes
+* The files generated are actually videos, not proper GIFs. Videos are created much faster, take less disk space, and on Twitter, functionally identical to GIFs (videos less than 6 seconds will also autoloop).
 
 ## Requirements
 moviepy, ffmpeg, twython, Pillow
